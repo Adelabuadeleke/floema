@@ -1,0 +1,19 @@
+{
+  "name": "floema",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "webpack -p --progress --config webpack.config.build.js",
+    "development": "webpack-dev-server --progress --config webpack.config.development.js",
+    "start": "npm run development"
+  },
+  "author": "Adelabu Kamaldeen",
+  "license": "ISC",
+  "devDependencies": {
+    "webpack": "^5.88.2",
+    "webpack-cli": "^5.1.4",
+    "webpack-dev-server": "^4.15.1",
+    "webpack-merge": "^5.9.0"
+  }
+}
