@@ -5,6 +5,7 @@ const {CleanWebpackPlugin} = require('clean-webpack-plugin')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const ImageMinimizerPlugin = require('image-minimizer-webpack-plugin')
+const TerserPlugin = require('terser-webpack-plugin')
 // const loader = require('mini-css-extract-plugin/types/loader');
 
 const IS_DEVELOPMENT = process.env.NODE_DEV = 'dev'
@@ -130,5 +131,9 @@ module.exports = {
   exclude: /node_modules/
  }
  ]
+ },
+ optimization:{
+  minimize: true,
+  minimizer: [new TerserPlugin()]
  }
 }
