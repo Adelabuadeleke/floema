@@ -9,7 +9,33 @@ const port = 3000
 const Prismic = require('@prismicio/client');
 const PrismicDOM = require('prismic-dom')
 
+const initApi = (req)=>{
+ return Prismic.getApi(process.env.PRISMIC_ENDPOINT,{
+  accessToken: process.env.PRISMIC_ACCESS_TOKEN,
+  req
+ })
+}
 
+const handleLinkResolver = (doc) =>{
+ // if(doc.tpye === 'page'){
+ //  return '/page/' + doc.uid;
+
+ // } else if(doc.tpye === 'blog_post'){
+ //  return '/blog/' + doc.uid
+ // }
+
+ return '/'
+}
+
+app.use((req, res, next)=>{
+ res.locals.ctx = {
+  endPoint: process.env.PRISMIC_ENDPOINT,
+  linkResolver: handleLinkResolver
+ }
+
+ res.locals.PrismicDOM = PrismicDOM;
+ next()
+})
 
 
 app.set('views', path.join(__dirname, 'views'))
