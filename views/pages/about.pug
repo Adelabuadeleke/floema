@@ -23,3 +23,22 @@ block content
 
       figure.about_content_media 
        img.about_content_media(alt=section.primary.image.alt src=section.primary.image.url)
+    if section.slice_type === 'highlight'
+      section.about_highlight 
+        .about_highlight_wrapper 
+          if section.primary.label 
+            section.primary.text 
+              p.about_highlight_label=section.primary.label 
+              
+          h3.about_highlight_title=section.primary.title 
+
+          each media in section.items
+            figure.about_highlight_media 
+                img.about_highlight_media(alt=media.image.alt src=media.image.url)
+
+    if section.slice_type === 'gallery'
+        section.about_gallery 
+            .about_gallery_wrapper 
+                each media in section.items  
+                    figure.about_highlight_media 
+                        img.about_highlight_media(alt=media.image.alt src=media.image.url)
