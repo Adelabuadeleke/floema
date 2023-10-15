@@ -1,12 +1,13 @@
 require('dotenv').config()
 
 
-const express  = require('express')
+const express = require('express')
 const app = express()
 const path = require('path')
 const port = 3000
 
 const Prismic = require('@prismicio/client');
+const PrismicDOM = require('prismic-dom')
 const PrismicH = require('@prismicio/helpers')
 const fetch = require('node-fetch')
 
@@ -97,7 +98,7 @@ app.get('/', async(req, res)=>{
 app.get('/about', async(req, res)=>{
  const api = await initApi(req)
  const defaults = await handleRequest(api)
- // console.log(defaults)
+ // console.log(defaults.about.data.body?.description)
   res.render('pages/about', {
    ...defaults
   })
