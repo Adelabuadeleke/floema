@@ -52,7 +52,7 @@ const handleRequest = async(api) =>{
  //  api.getSingle('about'),
  // ])
  const home = await api.getSingle('h')
- // const metadata = await api.getSingle('meta')
+//  const metadata = await api.getSingle('meta')
  const about = await api.getSingle('about')
   const assets = [];
 
@@ -104,14 +104,14 @@ app.get('/about', async(req, res)=>{
   })
 })
 
-app.get('/detail/:id', async(req, res)=>{
+app.get('/detail/:uid', async(req, res)=>{
  const api = await initApi(req)
  const defaults = await handleRequest(api)
-
+  // console.log('')
  const product = await api.getByUID('product', req.params.uid,{
   fetchLinks:'collection.title'
  })
-
+console.log(product.data.highlights)
  res.render('pages/detail', {
   ...defaults,
   product
