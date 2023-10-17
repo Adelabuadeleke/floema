@@ -54,12 +54,21 @@ const handleRequest = async(api) =>{
  const home = await api.getSingle('h')
 //  const metadata = await api.getSingle('meta')
  const about = await api.getSingle('about')
+ const collections = await api.query(Prismic.Predicates.at('document.type', 'collection'), {
+        fetchLinks: 'product.image',
+      })
   const assets = [];
 
   // home.data.gallery.forEach((item)=>[
   //  console.log(item)
   //  // assets.push(item.img.url)
   // ])
+
+  //   collections.forEach((collection) => {
+  //   collection.data.list.forEach((item) => {
+  //     assets.push(item.product.data.image.url);
+  //   });
+  // });
 
   about.data.gallery.forEach((item)=>[
    assets.push(item.image.url)
@@ -78,7 +87,7 @@ const handleRequest = async(api) =>{
   assets,
   // metadata,
   home,
-  // collections,
+  collections,
   about
  }
 
@@ -111,7 +120,7 @@ app.get('/detail/:uid', async(req, res)=>{
  const product = await api.getByUID('product', req.params.uid,{
   fetchLinks:'collection.title'
  })
-console.log(product.data.highlights)
+// console.log(product.data.highlights)
  res.render('pages/detail', {
   ...defaults,
   product
@@ -121,7 +130,12 @@ console.log(product.data.highlights)
 app.get('/collections', async(req, res)=>{
  const api = await initApi(req)
  const defaults = await handleRequest(api)
-
+ let coll = defaults.collections
+ let colls = []
+let coll = coll.forEach(col=>{
+  colls.push(col.data)
+})
+console.log(colls)
  res.render('pages/collections',{
   ...defaults
  })
