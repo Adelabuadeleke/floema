@@ -37,6 +37,17 @@ app.use((req, res, next)=>{
  }
 
  res.locals.PrismicH = PrismicH;
+ res.locals.Numbers = (index) => {
+    return index === 0
+      ? 'One'
+      : index === 1
+      ? 'Two'
+      : index === 2
+      ? 'Three'
+      : index === 3
+      ? 'Four'
+      : '';
+  };
  next()
 })
 
@@ -130,13 +141,8 @@ app.get('/detail/:uid', async(req, res)=>{
 app.get('/collections', async(req, res)=>{
  const api = await initApi(req)
  const defaults = await handleRequest(api)
- let coll = defaults.collections
- let colls = []
-let coll = coll.forEach(col=>{
-  colls.push(col.data)
-})
-console.log(colls)
- res.render('pages/collections',{
+//  console.log(defaults.collections.results[0].data.products)
+ res.render('pages/collections', {
   ...defaults
  })
 })
