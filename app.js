@@ -1,74 +1,97 @@
 require('dotenv').config()
 
-
+const logger = require('morgan')
 const express = require('express')
+const errorHandler = require('errorhandler')
+const bodyParser = require('body-parser')
+const methodOverride = require('method-override')
+
 const app = express()
 const path = require('path')
 const port = 3000
 
-const Prismic = require('@prismicio/client');
-const PrismicDOM = require('prismic-dom')
+app.use(logger('dev'))
+app.use(bodyParser.json())
+app.use(bodyParser.urlencoded({ extended: false }))
+app.use(methodOverride())
+app.use(errorHandler())
+
+const Prismic = require('@prismicio/client')
+// const PrismicDOM = require('prismic-dom')
 const PrismicH = require('@prismicio/helpers')
 const fetch = require('node-fetch')
+// const { error } = require('console')
+// const e = require('express')
 
-const initApi = (req)=>{
- return Prismic.createClient(process.env.PRISMIC_ENDPOINT,{
-  accessToken: process.env.PRISMIC_ACCESS_TOKEN,
-  req,
-  fetch
- })
+const initApi = (req) => {
+  return Prismic.createClient(process.env.PRISMIC_ENDPOINT, {
+    accessToken: process.env.PRISMIC_ACCESS_TOKEN,
+    req,
+    fetch
+  })
 }
 
-const handleLinkResolver = (doc) =>{
- // if(doc.tpye === 'page'){
- //  return '/page/' + doc.uid;
+const HandleLinkResolver = (doc) => {
+  console.log(doc.type)
+  if (doc.type === 'product') {
+    return `/detail/${doc.slug}`
+  }
 
- // } else if(doc.tpye === 'blog_post'){
- //  return '/blog/' + doc.uid
- // }
+  if (doc.type === 'collections') {
+    return '/collections'
+  }
 
- return '/'
+  if (doc.type === 'about') {
+    return '/about'
+  }
+
+  // Default to homepage
+  return '/'
 }
 
-app.use((req, res, next)=>{
- res.locals.ctx = {
-  endPoint: process.env.PRISMIC_ENDPOINT,
-  linkResolver: handleLinkResolver
- }
+app.use((req, res, next) => {
+  res.locals.ctx = {
+    endPoint: process.env.PRISMIC_ENDPOINT,
+    linkResolver: HandleLinkResolver
+  }
 
- res.locals.PrismicH = PrismicH;
- res.locals.Numbers = (index) => {
+  res.locals.Link = HandleLinkResolver
+  res.locals.PrismicH = PrismicH
+  res.locals.Numbers = (index) => {
     return index === 0
       ? 'One'
       : index === 1
-      ? 'Two'
-      : index === 2
-      ? 'Three'
-      : index === 3
-      ? 'Four'
-      : '';
-  };
- next()
+        ? 'Two'
+        : index === 2
+          ? 'Three'
+          : index === 3
+            ? 'Four'
+            : ''
+  }
+  next()
 })
-
 
 app.set('views', path.join(__dirname, 'views'))
 app.set('view engine', 'pug')
 app.locals.basedir = app.get('views')
 
-const handleRequest = async(api) =>{
- // const [metadata, home, about] = await Promise.all([
- //  api.getSingle('meta'),
- //  api.getSingle('h'),
- //  api.getSingle('about'),
- // ])
- const home = await api.getSingle('h')
-//  const metadata = await api.getSingle('meta')
- const about = await api.getSingle('about')
- const collections = await api.query(Prismic.Predicates.at('document.type', 'collection'), {
-        fetchLinks: 'product.image',
-      })
-  const assets = [];
+const handleRequest = async (api) => {
+  const [home, about, preloader, navigation, meta] = await Promise.all([
+  // api.getSingle('meta'),
+    api.getSingle('h'),
+    api.getSingle('about'),
+    api.getSingle('preloader'),
+    api.getSingle('navigation'),
+    api.getSingle('meta')
+
+  ])
+  //  const home = await api.getSingle('h')
+  // //  const metadata = await api.getSingle('meta')
+  //  const about = await api.getSingle('about')
+  const collections = await api.query(Prismic.Predicates.at('document.type', 'collection'), {
+    fetchLinks: 'product.image'
+  })
+  const assets = []
 
   // home.data.gallery.forEach((item)=>[
   //  console.log(item)
@@ -81,72 +104,71 @@ const handleRequest = async(api) =>{
   //   });
   // });
 
-  about.data.gallery.forEach((item)=>[
-   assets.push(item.image.url)
+  about.data.gallery.forEach((item) => [
+    assets.push(item.image.url)
   ])
 
-  about.data.body.forEach((section)=>{
-   if(section.slice_type === 'gallery'){
-    section.items.forEach((item)=>{
-     // console.log(item.image.url)
-     assets.push(item.image.url)
-    })
-   }
+  about.data.body.forEach((section) => {
+    if (section.slice_type === 'gallery') {
+      section.items.forEach((item) => {
+        // console.log(item.image.url)
+        assets.push(item.image.url)
+      })
+    }
   })
 
- return{
-  assets,
-  // metadata,
-  home,
-  collections,
-  about
- }
-
-
+  return {
+    assets,
+    preloader,
+    meta,
+    home,
+    collections,
+    about,
+    navigation
+  }
 }
 
-
-app.get('/', async(req, res)=>{
- const api = await initApi(req)
- const defaults = await handleRequest(api)
-
- res.render('pages/home',{
-  ...defaults
- })
-})
-
-app.get('/about', async(req, res)=>{
- const api = await initApi(req)
- const defaults = await handleRequest(api)
- // console.log(defaults.about.data.body?.description)
-  res.render('pages/about', {
-   ...defaults
+app.get('/', async (req, res) => {
+  const api = await initApi(req)
+  const defaults = await handleRequest(api)
+  // console.log(defaults.metadata)
+  res.render('pages/home', {
+    ...defaults
   })
 })
 
-app.get('/detail/:uid', async(req, res)=>{
- const api = await initApi(req)
- const defaults = await handleRequest(api)
+app.get('/about', async (req, res) => {
+  const api = await initApi(req)
+  const defaults = await handleRequest(api)
+  // console.log(defaults.about.data.body?.description)
+  res.render('pages/about', {
+    ...defaults
+  })
+})
+
+app.get('/detail/:uid', async (req, res) => {
+  const api = await initApi(req)
+  const defaults = await handleRequest(api)
   // console.log('')
- const product = await api.getByUID('product', req.params.uid,{
-  fetchLinks:'collection.title'
- })
-// console.log(product.data.highlights)
- res.render('pages/detail', {
-  ...defaults,
-  product
- })
+  const product = await api.getByUID('product', req.params.uid, {
+    fetchLinks: 'collection.title'
+  })
+  // console.log(product.data.highlights)
+  res.render('pages/detail', {
+    ...defaults,
+    product
+  })
 })
 
-app.get('/collections', async(req, res)=>{
- const api = await initApi(req)
- const defaults = await handleRequest(api)
-//  console.log(defaults.collections.results[0].data.products)
- res.render('pages/collections', {
-  ...defaults
- })
+app.get('/collections', async (req, res) => {
+  const api = await initApi(req)
+  const defaults = await handleRequest(api)
+  //  console.log(defaults.collections.results[0].data.products)
+  res.render('pages/collections', {
+    ...defaults
+  })
 })
 
-app.listen(port, ()=>{
- console.log(`listening on port ${port}`)
+app.listen(port, () => {
+  console.log(`listening on port ${port}`)
 })
