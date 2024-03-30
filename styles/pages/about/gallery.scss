@@ -1,8 +1,36 @@
-.about_gallery {}
+.about_gallery {
+ height: 58.6rem;
+ margin: 20rem 0;
+ overflow: hidden;
+ position: relative;
 
-.about_gallery_wrapper {}
+ &:first-child{
+  margin-top: 0;
+ }
 
-.about_gallery_media {}
+ &:last-child{
+  margin-bottom: 0;
+ }
+}
 
-.about_gallery_media_image {}
+.about_gallery_wrapper {
+ align-items: center;
+ display: flex;
+ position: absolute;
+ top: 50%;
+ transform: translateY(-50%);
+}
+
+.about_gallery_media {
+ height: 43.7rem;
+ margin: 0.4rem;
+ position: relative;
+ width: 30.9rem;
+
+}
+
+.about_gallery_media_image {
+ @extend %cover;
+ object-fit: cover;
+}
 
