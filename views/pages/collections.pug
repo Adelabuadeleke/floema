@@ -38,3 +38,8 @@ block content
           .collections__mobile__item
             .collections__mobile__item__label!=`${home.data.collection}<br>${Numbers(index)}`
             .collections__mobile__item__title=collection.data.title
+      
+      .collections__mobile_item
+        each collection, index in collections.results
+          .collections__mobile_item__label!=`${home.data.collection}<br>${Numbers(index)}`
+          .collections__mobile_item__title=collection.data.title
