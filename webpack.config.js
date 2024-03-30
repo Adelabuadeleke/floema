@@ -104,7 +104,7 @@ module.exports = {
       }
     },
     {
-      test: /\.(jpe?g|png|gif|svg|woff2?|fnt|webp)$/,
+      test: /\.(jpe?g|png|gif|svg|webp)$/,
       use: [
         {
           loader: ImageMinimizerPlugin.loader,
