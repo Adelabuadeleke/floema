@@ -1,0 +1,1 @@
+(()=>{"use strict";(()=>{class o{constructor(){console.log("About")}}class s{constructor(){console.log("Collections")}}class c{constructor(){console.log("Detail")}}class e{constructor(){console.log("Home")}}new class{constructor(){this.createPages()}createPages(){this.pages={about:new o,collections:new s,detail:new c,home:new e},console.log(this.page)}}})()})();
