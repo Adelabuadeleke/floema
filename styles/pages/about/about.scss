@@ -1,6 +1,13 @@
 .about {
- background: $color-cadet-blue;
- color: $color-bright-gray;
+ @extend %page;
+
+ // &--active {
+  
+ // }
+
+ // background: $color-cadet-blue;
+ // color: $color-bright-gray;
+ // opacity: 0;
 }
 .about_wrapper{
 
@@ -9,9 +16,14 @@
 .about_title{
  @extend %title-100;
 
- max-width: 124rem;
+ // line-height: 0;
  margin: auto;
+ max-width: 124rem;
  text-align: center;
+
+ // span span{
+ //  line-height: 1;
+ // }
 
  @include media('<phone'){
   max-width: 67.7rem;

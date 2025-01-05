@@ -6,8 +6,16 @@
 }
 
 html{
+  @extend %cover;
+
  font-size: calc(100vw / 1920 * 10);
+ height: 100%;
+ left: 0;
  line-height: 1;
+ overflow: hidden;
+ position: fixed;
+ top: 0;
+ width: 100%;
 
  @include media('<phone'){
    font-size: calc(100vw / 750 * 10);
@@ -15,10 +23,17 @@ html{
 }
 
 body{
- @extend %description-16;
+  @extend %cover;
+  @extend %description-16;
 
- font-family: $font-suisse-bp;
-
+  // background-color: $color-contessa;
+  // color: $color-quarter-spanish-white;
+  // height: 100%;
+  font-family: $font-suisse-bp;
+  // left: 0;
+  // position: fixed;
+  // top: 0;
+  // width: 100%;
  // @include media('<phone'){
  //  font-size: 100px;
  // }
@@ -32,9 +47,25 @@ a{
 }
 
 img{
- vertical-align: middle;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  vertical-align: middle;
+
+  &.loaded {
+    opacity: 1;
+  }
 }
 
 .content {
  @extend %cover;
+}
+
+[data-animation="label"],
+[data-animation="paragraph"],
+[data-animation="title"] {
+  span {
+    display: inline-block;
+    overflow: hidden;
+    vertical-align: top;
+  }
 }

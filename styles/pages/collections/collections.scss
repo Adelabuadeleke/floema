@@ -1,5 +1,7 @@
 .collections{
- @extend %cover;
+ @extend %page;
+
+ @extend %center;
  background: $color-quick-sand;
  color: $color-quarter-spanish-white;
 }
@@ -74,8 +76,12 @@ opacity: 0;
 }
 .collections__mobile{
  bottom: 5rem;
- display: flex;
+ display: none;
  position: absolute;
+
+ @include media('<phone') {
+  display: flex;
+ }
 }
 .collections__mobile__item{
  padding-left: 5rem;

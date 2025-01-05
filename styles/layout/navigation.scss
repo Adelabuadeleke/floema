@@ -12,10 +12,16 @@
  font-size: 0;
  height: 2rem;
  left: 4rem;
+ transition: opacity 0.4s ease;
+ // line-height: 1.2rem;
  pointer-events: auto;
  position: absolute;
  top: 4rem;
  width: 12.8rem;
+
+ &:hover {
+  opacity: 0.5;
+ }
 
  @include media('<phone'){
   height: 4.3rem;
@@ -42,9 +48,11 @@
 }
 
 .navigation__list__link{
+ @extend %links--hidden;
  @extend %title-20;
+
  display: block;
- 
+ line-height: 1;
 }
 
 

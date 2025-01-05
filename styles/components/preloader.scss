@@ -2,7 +2,7 @@
  @extend %cover;
 
  // display: flex;
- display: none;
+ // display: none;
  align-items: center;
  justify-content: center;
  text-align: center;
@@ -13,21 +13,36 @@
 }
 
 .preloader_text{
- @extend %title-53;
 
+ font-size: 0;
  max-width: 66rem;
+
+ span {
+  display: inline-block;
+  overflow: hidden;
+ }
+
+ span span {
+  @extend %title-53;
+ }
 }
 
 .preloader_number{
  @extend %description-14;
 
- position: absolute;
  bottom: 7.3rem;
  left: 50%;
+ overflow: hidden;
+ position: absolute;
  transform: translate(-50%);
 
  @include media('<phone'){
   font-size: 2.4rem;
 
  }
+}
+
+
+.preloader_number_text {
+ display: inline-block;
 }
