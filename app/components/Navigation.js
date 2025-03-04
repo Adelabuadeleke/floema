@@ -1,5 +1,5 @@
 import Component from 'classes/Component'
-import { template } from 'lodash'
+// import { template } from 'lodash'
 import { COLOR_BRIGHT_GREY, COLOR_QUARTER_SPANISH_WHITE } from 'utils/colors'
 import GSAP from 'gsap'
 
@@ -8,15 +8,15 @@ export default class Navigation extends Component {
     super({
       element: '.navigation',
       elements: {
-        items: '.navigaion__list__item',
+        items: '.navigation__list__item',
         links: '.navigation__list__link'
       }
     })
-
+    console.log(this)
     this.onChange(template)
   }
 
-  onChange () {
+  onChange (template) {
     if (template === 'about') {
       GSAP.to(this.element, {
         color: COLOR_BRIGHT_GREY,

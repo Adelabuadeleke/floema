@@ -3,20 +3,27 @@ import Component from 'classes/Component'
 import each from 'lodash/each'
 import { split } from 'utils/text'
 
-export class Preloader extends Component {
+export default class Preloader extends Component {
   constructor () {
     super({
       element: '.preloader',
       elements: {
-        title: '.preloader__text',
-        number: '.preloader__number',
-        numberText: 'preloader__number__text',
+        title: '.preloader_text',
+        number: '.preloader_number',
+        numberText: '.preloader__number_text',
         images: document.querySelectorAll('img')
       }
     })
 
+    console.log(this.elements.title)
+
     split({
-      elements: this.elements.title,
+      element: this.elements.title,
+      expression: '<br>'
+    })
+
+    split({
+      element: this.elements.title,
       expression: '<br>'
     })
 
@@ -37,7 +44,7 @@ export class Preloader extends Component {
   }
 
   onAssetLoaded (image) {
-    this.length += 1
+    this.length++
 
     const percent = this.length / this.elements.images.length
 
