@@ -48,7 +48,7 @@
 }
 
 .navigation__list__link{
- @extend %links--hidden;
+ @extend %link--hidden;
  @extend %title-20;
 
  display: block;
