@@ -21,7 +21,7 @@ block content
         .about_content_wrapper  
           .about_content_box
             p.about_content_label!=section.primary.label 
-            .about_content_description!=PrismicH.asHTML(section.primary.description.replace(/<p>/g, '<p data-animation="paragraph">')) 
+            .about_content_description!=PrismicH.asHTML(section.primary.description).replace(/<p>/g, '<p data-animation="paragraph">') 
           figure.about_content_media 
             img.about_content_media_image(alt=section.primary.image.alt data-src=section.primary.image.url)
 
