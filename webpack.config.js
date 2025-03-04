@@ -126,7 +126,7 @@ module.exports = {
     },
     {
       test: /\.(glsl| frag| vert)$/,
-      loader: 'glsify-loader',
+      loader: 'glslify-loader',
       exclude: /node_modules/
     }
     ]
