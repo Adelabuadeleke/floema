@@ -1,0 +1,10 @@
+{
+  "editor.defaultFormatter": null,
+  "editor.formatOnSave": false,
+  "[javascript]": {
+    "editor.defaultFormatter": null
+  },
+  "[typescript]": {
+    "editor.defaultFormatter": null
+  }
+}
