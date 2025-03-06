@@ -157,7 +157,7 @@ class App {
     }
   }
 
-  udpate () {
+  update () {
     if (this.page && this.page.update) {
       this.page.update()
     }
