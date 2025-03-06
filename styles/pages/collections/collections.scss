@@ -1,5 +1,6 @@
 .collections{
  @extend %page;
+  z-index: 0;
 
  @extend %center;
  background: $color-quick-sand;
