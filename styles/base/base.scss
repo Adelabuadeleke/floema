@@ -47,6 +47,11 @@ a{
  outline: none;
 }
 
+canvas {
+  pointer-events: none;
+  position: relative;
+}
+
 img{
   opacity: 0;
   transition: opacity 0.4s ease;
