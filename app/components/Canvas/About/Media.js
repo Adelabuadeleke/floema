@@ -40,6 +40,7 @@ export default class {
       fragment,
       vertex,
       uniforms: {
+        uAlpha: { value: 0 },
         tMap: { value: this.texture }
       }
     })
@@ -85,7 +86,7 @@ export default class {
   /**
    * Events
    */
-  onResze (sizes, scroll) {
+  onResize (sizes, scroll) {
     this.extra = 0
     // this.extra = {
     //   x: 0,
@@ -99,20 +100,30 @@ export default class {
   /**
    * Loop
    */
+  updateRotation () {
+    this.mesh.rotation.z = GSAP.utils.mapRange(-this.sizes.width / 2, this.sizes.width / 2, Math.PI * 0.1, -Math.PI * 0.1, this.mesh.position.x)
+  }
+
   updateScale (sizes) {
     this.width = this.bounds.width / window.innerWidth
     this.height = this.bounds.height / window.innerHeight
 
     this.mesh.scale.x = this.sizes.width * this.width
     this.mesh.scale.y = this.sizes.height * this.height
+    const scale = GSAP.utils.mapRange(0,
+      this.sizes.width / 2, 0.1, 0, Math.abs(this.mesh.position.x))
 
-    this.mesh.position.x =
-      -this.sizes.width / 2 + this.mesh.scale.x / 2 + this.x * this.sizes.width
-    this.mesh.position.y =
-      -this.sizes.height / 2 -
-      this.mesh.scale.y / 2 -
-      this.y * this.sizes.height
-    console.log(this.height, this.width)
+    this.mesh.rotation.x += scale
+    this.mesh.rotation.y += scale
+
+    // this.mesh.position.x =
+    //   -this.sizes.width / 2 + this.mesh.scale.x / 2 + this.x * this.sizes.width
+
+    // this.mesh.position.y =
+    //   -this.sizes.height / 2 -
+    //   this.mesh.scale.y / 2 -
+    //   this.y * this.sizes.height
+    // console.log(this.height, this.width)
   }
 
   updateX (x = 0) {
@@ -132,10 +143,15 @@ export default class {
       -this.sizes.height / 2 -
       this.mesh.scale.y / 2 -
       (this.y + y) * this.sizes.height
+
+    this.mesh.position.y += Math.cos((this.mesh.position.x / this.sizes.width) * Math.PI * 0.1) * 40 - 40
   }
 
   update (scroll) {
     if (!this.bounds) return
+
+    this.updateRotation()
+    this.updateScale()
     this.updateX(scroll.x)
     this.updateY(scroll.y)
   }

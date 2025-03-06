@@ -26,7 +26,8 @@ export default class Gallery {
       current: 0,
       target: 0,
       start: 0,
-      lerp: 0.1
+      lerp: 0.1,
+      velocity: 1
     }
     this.crateMedias()
     this.group.setParent(this.scene)
@@ -93,14 +94,22 @@ export default class Gallery {
   /**
    * Update
    */
-  update () {
+  update (scroll) {
     if (!this.bounds) return
+
+    const distance = (scroll.current - scroll.target) * 0.1
+    const y = scroll.current / window.innerHeight
 
     if (this.scroll.current < this.scroll.target) {
       this.direction = 'right'
+      this.scroll.velocity = -1
     } else if (this.scroll.current > this.scroll.target) {
       this.direction = 'left'
+      this.scroll.velocity = 1
     }
+
+    this.scroll.target -= this.scroll.velocity
+    this.scroll.target += distance
 
     this.scroll.current = GSAP.utils.interpolate(
       this.scroll.current,
@@ -109,7 +118,7 @@ export default class Gallery {
     )
 
     map(this.medias, (media, index) => {
-      const scaleX = media.mesh.scale.x / 2
+      const scaleX = media.mesh.scale.x / 2 + 0.25
 
       if (this.direction === 'left') {
         const x = media.mesh.position.x + scaleX
@@ -129,6 +138,8 @@ export default class Gallery {
 
       // media.mesh.position.y = Math.cos((media.mesh.position.x / this.width) * Math.PI) * 75 - 75
     })
+
+    this.group.position.y = y * this.sizes.height
   }
 
   /**
