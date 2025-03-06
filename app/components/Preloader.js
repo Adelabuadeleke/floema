@@ -1,21 +1,27 @@
 import GSAP from 'gsap'
 import Component from 'classes/Component'
-import each from 'lodash/each'
+// import each from 'lodash/each'
 import { split } from 'utils/text'
+import { Texture } from 'ogl'
+// import _ from 'lodash'
 
 export default class Preloader extends Component {
-  constructor () {
+  constructor ({ canvas }) {
     super({
       element: '.preloader',
       elements: {
         title: '.preloader_text',
         number: '.preloader_number',
-        numberText: '.preloader__number_text',
-        images: document.querySelectorAll('img')
+        numberText: '.preloader__number_text'
+        // images: document.querySelectorAll('img')
       }
     })
 
-    console.log(this.elements.title)
+    this.canvas = canvas
+
+    window.TEXTURES = {}
+
+    // console.log(this.elements.title)
 
     split({
       element: this.elements.title,
@@ -37,16 +43,29 @@ export default class Preloader extends Component {
   }
 
   createLoader () {
-    each(this.elements.images, element => {
-      element.src = element.getAttribute('data-src')
-      element.onload = _ => this.onAssetLoaded(element)
+    const texture = new Texture(this.canvas.gl, {
+      generateMipmaps: false
+    })
+
+    window.ASSETS.forEach(image => {
+      const media = new window.Image()
+
+      media.crossOrigin = 'anonymous'
+      media.src = image
+      media.onload = _ => {
+        texture.image = media
+        this.onAssetLoaded()
+      }
+
+      window.TEXTURES[image] = texture
+      console.log(image)
     })
   }
 
   onAssetLoaded (image) {
     this.length++
 
-    const percent = this.length / this.elements.images.length
+    const percent = this.length / window.ASSETS.length
 
     this.elements.numberText.innerHTML = `${Math.round(percent * 100)}%`
 
@@ -57,8 +76,10 @@ export default class Preloader extends Component {
 
   onloaded () {
     return new Promise(resolve => {
+      this.emit('completed')
+
       this.animateOut = GSAP.timeline({
-        delay: 2
+        delay: 1
       })
 
       this.animateOut.to(this.elements.titleSpans, {
@@ -76,14 +97,15 @@ export default class Preloader extends Component {
       }, '-=1.4')
 
       this.animateOut.to(this.element, {
-        duration: 1.5,
-        ease: 'expo.out',
-        scaleY: 0,
-        transformOrigin: '100% 100%'
-      }, '-=1')
+        autoAlpha: 0,
+        duration: 1
+        // ease: 'expo.out',
+        // scaleY: 0,
+        // transformOrigin: '100% 100%'
+      })
 
       this.animateOut.call(_ => {
-        this.emit('completed')
+        this.destroy()
       })
     })
   }

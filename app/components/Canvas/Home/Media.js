@@ -1,4 +1,4 @@
-import { Mesh, Program, Texture } from 'ogl'
+import { Mesh, Program } from 'ogl'
 
 import vertex from 'shaders/plain-vertex.glsl'
 import fragment from 'shaders/plain-fragment.glsl'
@@ -15,7 +15,7 @@ export default class {
     this.scene = scene
     this.sizes = sizes
 
-    this.createTexture()
+    // this.createTexture()
     this.createProgram()
     this.createMesh()
 
@@ -26,9 +26,11 @@ export default class {
   }
 
   createTexture () {
-    this.texture = new Texture(this.gl)
+    // this.texture = new Texture(this.gl)
+    const image = this.element
 
-    this.image = new window.Image()
+    this.texture = window.TEXTURES[image.getAttribute('data-src')]
+
     this.image.crossOrigin = 'anonymous'
     this.image.src = this.element.getAttribute('data-src')
     this.image.onload = (_) => (this.texture.image = this.image)

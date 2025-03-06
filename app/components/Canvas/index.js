@@ -23,7 +23,6 @@ export default class Canvas {
     this.createScene()
 
     this.onResize()
-    this.onChangeEnd(this.template)
     // this.createHome()
   }
 
@@ -103,6 +102,10 @@ export default class Canvas {
   /**
    * Events
    **/
+  onPreloaded () {
+    this.onChangeEnd(this.template)
+  }
+
   onChangeStart () {
     if (this.about) {
       this.about.hide()

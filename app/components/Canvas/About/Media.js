@@ -1,4 +1,4 @@
-import { Mesh, Program, Texture } from 'ogl'
+import { Mesh, Program } from 'ogl'
 import GSAP from 'gsap'
 
 import vertex from 'shaders/plain-vertex.glsl'
@@ -27,8 +27,11 @@ export default class {
   }
 
   createTexture () {
-    this.texture = new Texture(this.gl)
     const image = this.element.querySelector('img')
+
+    // this.texture = new Texture(this.gl)
+    this.texture = window.TEXTURES[image.getAttribute('data-src')]
+
     this.image = new window.Image()
     this.image.crossOrigin = 'anonymous'
     this.image.src = image.getAttribute('data-src')
