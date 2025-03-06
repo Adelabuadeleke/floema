@@ -153,12 +153,12 @@ class App {
   }
 
   udpate () {
-    if (this.canvas && this.onResize) {
-      this.canvas.update()
-    }
-
     if (this.page && this.page.update) {
       this.page.update()
+    }
+
+    if (this.canvas && this.onResize) {
+      this.canvas.update(this.page.scroll)
     }
 
     this.frame = window.requestAnimationFrame(this.udpate.bind(this))
