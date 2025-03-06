@@ -94,16 +94,16 @@ const handleRequest = async (api) => {
   })
   const assets = []
 
-  // home.data.gallery.forEach((item)=>[
+  home.data.gallery.forEach((item) => {
   //  console.log(item)
-  //  // assets.push(item.img.url)
-  // ])
+    assets.push(item.img.url)
+  })
 
-  //   collections.forEach((collection) => {
-  //   collection.data.list.forEach((item) => {
-  //     assets.push(item.product.data.image.url);
-  //   });
-  // });
+  collections.forEach((collection) => {
+    collection.data.list.forEach((item) => {
+      assets.push(item.product.data.image.url)
+    })
+  })
 
   about.data.gallery.forEach((item) => [
     assets.push(item.image.url)
