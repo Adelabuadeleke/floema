@@ -79,7 +79,7 @@ class App {
   }
 
   async onChange (url) {
-    this.canvas.onChangeStart(this.template)
+    this.canvas.onChangeStart(this.template, url)
     // console.log(url)
     await this.page.hide()
 
@@ -88,6 +88,8 @@ class App {
     if (request.status === 200) {
       const html = await request.text()
       const div = document.createElement('div')
+
+      window.history.pushState({}, '', url)
 
       div.innerHTML = html
 
