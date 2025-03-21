@@ -106,10 +106,13 @@ export default class Canvas {
     this.onChangeEnd(this.template)
   }
 
-  onChangeStart () {
+  onChangeStart (template, url) {
     if (this.about) {
       this.about.hide()
     }
+
+    this.isFromCollectionsToDetail = this.template === 'collections' && url.indexOf('collection') > -1
+    this.isFromDetailToCollections = this.template === 'detail'
 
     if (this.collections) {
       this.collections.hide()
