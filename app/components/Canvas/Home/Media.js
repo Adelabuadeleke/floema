@@ -1,7 +1,7 @@
 import { Mesh, Program } from 'ogl'
 
-import vertex from 'shaders/plain-vertex.glsl'
-import fragment from 'shaders/plain-fragment.glsl'
+import vertex from 'shaders/home-vertex.glsl'
+import fragment from 'shaders/home-fragment.glsl'
 // eslint-disable-next-line no-unused-vars
 import _ from 'lodash'
 import GSAP from 'gsap'
@@ -15,7 +15,7 @@ export default class {
     this.scene = scene
     this.sizes = sizes
 
-    // this.createTexture()
+    this.createTexture()
     this.createProgram()
     this.createMesh()
 
@@ -42,6 +42,8 @@ export default class {
       vertex,
       uniforms: {
         uAlpha: { value: 0 },
+        uSpeed: { value: 0 },
+        uViewportSizes: { value: [this.sizes.width, this.sizes.height] },
         tMap: { value: this.texture }
       }
     })
@@ -74,7 +76,7 @@ export default class {
     GSAP.from(this.program.uniforms.uAlpha, {
       value: 0
     }, {
-      value: 1
+      value: 0.4
     })
   }
 
@@ -136,9 +138,11 @@ export default class {
       this.extra.y
   }
 
-  update (scroll) {
+  update (scroll, speed) {
     if (!this.bounds) return
     this.updateX(scroll.x)
     this.updateY(scroll.y)
+
+    this.program.uSpeed.value = speed
   }
 }
