@@ -15,6 +15,10 @@ export default class {
     this.index = index
     this.scene = scene
     this.sizes = sizes
+    this.extra = {
+      x: 0,
+      y: 0
+    }
 
     this.createTexture()
     this.createProgram()
@@ -24,6 +28,10 @@ export default class {
       x: 0,
       y: 0
     }
+
+    this.createBounds({
+      sizes: this.sizes
+    })
   }
 
   createTexture () {
@@ -151,7 +159,7 @@ export default class {
   }
 
   update (scroll) {
-    if (!this.bounds) return
+    // if (!this.bounds) return
 
     this.updateRotation()
     this.updateScale()

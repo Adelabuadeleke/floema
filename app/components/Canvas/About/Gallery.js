@@ -30,6 +30,9 @@ export default class Gallery {
       velocity: 1
     }
     this.crateMedias()
+    this.onResize({
+      sizes: this.sizes
+    })
     this.group.setParent(this.scene)
   }
 
