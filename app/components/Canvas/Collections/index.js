@@ -7,11 +7,14 @@ import Prefix from 'prefix'
 // import { lerp } from 'utls/math'
 
 export default class {
-  constructor ({ gl, scene, sizes }) {
+  constructor ({ gl, scene, sizes, transition }) {
+    this.id = 'collections'
+
     this.group = new Transform()
     this.gl = gl
     this.sizes = sizes
     this.scene = scene
+    this.transition = transition
 
     this.transformPrefix = Prefix('transform')
 
@@ -52,6 +55,10 @@ export default class {
     this.createGeometry()
     this.createGallery()
 
+    this.onResize({
+      sizes: this.sizes
+    })
+
     this.group.setParent(this.scene)
     this.show()
   }
@@ -77,6 +84,12 @@ export default class {
    * Animations
    */
   show () {
+    if (this.transition) {
+      this.transition.animate(this.medias[0].mesh, _ => {
+
+      })
+    }
+
     map(this.medias, media => media.show())
   }
 
@@ -146,8 +159,6 @@ export default class {
    * Update
    */
   update () {
-    if (!this.bounds) return
-
     this.scroll.target = GSAP.utils.clamp(-this.scroll.limit, 0, this.scroll.target)
 
     this.scroll.current = GSAP.utils.interpolate(
@@ -175,18 +186,19 @@ export default class {
     // this.galleryWidth =
     //   (this.bounds.width / window.innerWidth) * this.sizes.width;
     console.log(this.x.direction)
-
-    map(this.medias, (media, index) => {
-      media.update(this.scroll.current)
-    })
-
     const index = Math.floor(Math.abs(this.scroll.current / this.scroll.limit) * this.medias.length)
-    console.log(index)
+    // console.log(index)
 
     if (this.index !== index) {
       this.index = index
       this.onChanged(index)
     }
+
+    map(this.medias, (media, index) => {
+      media.update(this.scroll.current, this.index)
+
+      media.mesh.position.y += Math.cos((media.mesh.position.x / this.sizes.width) * Math.PI * 0.1) * 40 - 40
+    })
   }
 
   /**

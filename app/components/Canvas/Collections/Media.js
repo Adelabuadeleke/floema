@@ -1,7 +1,7 @@
 import { Mesh, Program } from 'ogl'
 
-import vertex from 'shaders/plain-vertex.glsl'
-import fragment from 'shaders/plain-fragment.glsl'
+import vertex from 'shaders/collection-vertex.glsl'
+import fragment from 'shaders/collection-fragment.glsl'
 // eslint-disable-next-line no-unused-vars
 import _ from 'lodash'
 import GSAP from 'gsap'
@@ -15,13 +15,23 @@ export default class {
     this.scene = scene
     this.sizes = sizes
 
-    this.createTexture()
-    this.createProgram()
-    this.createMesh()
-
     this.extra = {
       x: 0,
       y: 0
+    }
+
+    this.createTexture()
+    this.createProgram()
+    this.createMesh()
+    this.createBounds({
+      sizes: this.sizes
+    })
+
+    this.opacity = {
+      current: 0,
+      target: 0,
+      lerp: 0.1,
+      multiplier: 0
     }
   }
 
@@ -72,16 +82,16 @@ export default class {
    * Animations
    */
   show () {
-    GSAP.from(this.program.uniforms.uAlpha, {
-      value: 0
+    GSAP.from(this.opacity, {
+      multiplier: 0
     }, {
-      value: 1
+      multiplier: 1
     })
   }
 
   hide () {
-    GSAP.from(this.program.uniforms.uAlpha, {
-      value: 0
+    GSAP.from(this.opacity, {
+      multiplier: 0
     })
   }
 
@@ -137,9 +147,14 @@ export default class {
       this.extra.y
   }
 
-  update (scroll) {
-    if (!this.bounds) return
+  update (scroll, index) {
+    // if (!this.bounds) return
     this.updateX(scroll)
     this.updateY()
+
+    // this.opacity.target = this.index === index ? 1 : 0.4
+    // this.opacity.current = GSAP.utils.interpolate(this.opacity.current, this.opacity.target, this.opacity.lerp)
+
+    this.program.uniforms.uAlpha.value = this.opacity.multiplier
   }
 }
